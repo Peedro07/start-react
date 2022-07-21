@@ -1,29 +1,20 @@
-import {Redirect, Route} from "react-router-dom";
+import React from "react"
+import { Redirect } from "react-router-dom"
+import Login from "../pages/login/Login";
+import Dashboard from "../pages/dashboard";
+// Authentication
 
-const PrivateRoute = ({children, ...rest}) => {
+const authProtectedRoutes = [
+  { path: "/dashboard", component: Dashboard },
 
-    const auth = true
-    return (
-        <Route
-            {...rest}
-            render={props => (
+  // this route should be at the end of all other routes
+  // eslint-disable-next-line react/display-name
+  { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },
+]
 
-                // If the token is set in the store the user can access the private pages
-                auth ? (
-                    <>
-                        {children}
-                    </>
 
-                ) : (
-                    // If the token is not present, we redirect to the login page
-                    <Redirect
-                        to={{
-                            pathname: "/login",
-                        }}
-                    />
-                )
-            )}
-        />
-    );
-}
-export default PrivateRoute
+const publicRoutes = [
+  { path: "/login", component: Login },
+]
+
+export {publicRoutes, authProtectedRoutes}
